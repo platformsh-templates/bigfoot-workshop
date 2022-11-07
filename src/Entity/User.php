@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @Orm\Table("`user`")
  * @UniqueEntity({"email"}, message="It looks like that email is already registered")
  * @UniqueEntity({"username"}, message="Oh crazy - that username is already taken! Maybe by a Bigfoot?")
  */
