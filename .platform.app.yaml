@@ -22,12 +22,14 @@ runtime:
         - mbstring
         - sodium
         - xsl
-        - blackfire
+        - pdo_pgsql
 
 variables:
     env:
         # ensure that assets won't be built as they are already committed.
         NO_YARN: 1
+    php:
+        assert.active: off
 
 # The hooks that will be performed when the package is deployed.
 hooks:
