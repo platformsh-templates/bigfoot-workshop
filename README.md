@@ -16,10 +16,17 @@ git clone git@github.com:platformsh-templates/sfcon2022-symfony-bigfoot-workshop
 To get it working, pour some coffee or tea, and
 follow these steps:
 
-**Download Composer dependencies**
+**Use Composer**
 
 Make sure you have [Composer installed](https://getcomposer.org/download/)
-and then run:
+
+
+<details>
+<summary>Using Symfony server</summary>
+<!-- <blockquote>
+<br/> -->
+
+**Download Composer dependencies**
 
 ```
 composer install
@@ -28,10 +35,6 @@ composer install
 You may alternatively need to run `php composer.phar install`, depending
 on how you installed Composer.
 
-<details>
-<summary>Using Symfony server</summary>
-<!-- <blockquote>
-<br/> -->
 
 **Configure the .env (or .env.local) File**
 
@@ -122,6 +125,7 @@ Steps are as follows:
    1. run `symfony ssh`
    1. [option] run `$ php bin/console doctrine:schema:update --dump-sql`
    1. run `php bin/console doctrine:schema:update --force`
+   1. run `php bin/console doctrine:fixtures:load -e dev`   
    1. `exit` from Platform.sh container
 1. [Install ddev](https://ddev.readthedocs.io/en/stable/#installation).
 1. run `ddev config`
