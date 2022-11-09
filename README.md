@@ -45,8 +45,8 @@ and *override* any configuration you need there (instead of changing
 
 > **Note:**
 >
-> if you don't have PostgreSQL installed locally, you can use docker container with PostgreSQL installed
-> and run command 
+> if you don't have PostgreSQL installed locally, you can use provided PostgreSQL container
+> by running command 
 > ```
 > docker-compose up -d 
 > ```
