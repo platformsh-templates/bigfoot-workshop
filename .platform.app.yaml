@@ -73,3 +73,13 @@ crons:
     update-sighting:
         spec: '*/5 * * * *'
         cmd: './bin/console app:update-sighting-scores'
+
+source:
+    operations:
+        update-dependencies:
+            command: |
+                if [ "$PLATFORM_ENVIRONMENT_TYPE" != production ]; then
+                  composer update
+                  git add composer.lock
+                  git commit --allow-empty -m "Dependency updates."
+                fi
