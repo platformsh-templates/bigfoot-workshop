@@ -22,7 +22,7 @@ final class Version20190919174624 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE big_foot_sighting ALTER COLUMN IF EXISTS latitude TYPE NUMERIC(9, 6), ALTER COLUMN IF EXISTS longitude TYPE NUMERIC(9, 6)');
+        $this->addSql('ALTER TABLE big_foot_sighting ALTER COLUMN latitude TYPE NUMERIC(9, 6), ALTER COLUMN longitude TYPE NUMERIC(9, 6)');
     }
 
     public function down(Schema $schema) : void
@@ -30,6 +30,6 @@ final class Version20190919174624 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE big_foot_sighting ALTER COLUMN IF EXISTS latitude TYPE NUMERIC(8, 6), ALTER COLUMN IF EXISTS longitude TYPE NUMERIC(8, 6)');
+        $this->addSql('ALTER TABLE big_foot_sighting ALTER COLUMN latitude TYPE NUMERIC(8, 6), ALTER COLUMN longitude TYPE NUMERIC(8, 6)');
     }
 }
