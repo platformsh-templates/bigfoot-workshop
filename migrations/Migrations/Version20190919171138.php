@@ -24,8 +24,8 @@ final class Version20190919171138 extends AbstractMigration
 
 //        $this->addSql('CREATE TABLE comment (id INT AUTO_INCREMENT NOT NULL, owner_id INT NOT NULL, big_foot_sighting_id INT NOT NULL, content LONGTEXT NOT NULL, created_at DATETIME NOT NULL, INDEX IDX_9474526C7E3C61F9 (owner_id), INDEX IDX_9474526C183C610D (big_foot_sighting_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
 
-        $this->addSql('CREATE SEQUENCE comment_seq;');
-        $this->addSql("CREATE TABLE comment (id INT DEFAULT NEXTVAL ('comment_seq') NOT NULL, owner_id INT NOT NULL, big_foot_sighting_id INT NOT NULL, content TEXT NOT NULL, created_at TIMESTAMP(0) NOT NULL, PRIMARY KEY(id))");
+        $this->addSql('CREATE SEQUENCE IF NOT EXISTS comment_seq;');
+        $this->addSql("CREATE TABLE IF NOT EXISTS comment (id INT DEFAULT NEXTVAL ('comment_seq') NOT NULL, owner_id INT NOT NULL, big_foot_sighting_id INT NOT NULL, content TEXT NOT NULL, created_at TIMESTAMP(0) NOT NULL, PRIMARY KEY(id))");
         $this->addSql('CREATE INDEX IDX_9474526C7E3C61F9 ON comment (owner_id);');
         $this->addSql('CREATE INDEX IDX_9474526C183C610D ON comment (big_foot_sighting_id);');
 
