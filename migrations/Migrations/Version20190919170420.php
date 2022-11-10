@@ -22,7 +22,7 @@ final class Version20190919170420 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE "user" ADD username VARCHAR(100) NOT NULL');
+        $this->addSql('ALTER TABLE "user" ADD COLUMN IF NOT EXISTS username VARCHAR(100) NOT NULL');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649F85E0677 ON "user" (username)');
     }
 

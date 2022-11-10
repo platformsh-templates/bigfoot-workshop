@@ -22,7 +22,7 @@ final class Version20191010184120 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE "user" ADD agreed_to_terms_at TIMESTAMP NOT NULL');
+        $this->addSql('ALTER TABLE "user" ADD COLUMN IF NOT EXISTS agreed_to_terms_at TIMESTAMP NOT NULL');
     }
 
     public function down(Schema $schema) : void

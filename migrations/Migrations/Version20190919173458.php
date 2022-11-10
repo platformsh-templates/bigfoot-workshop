@@ -22,7 +22,7 @@ final class Version20190919173458 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE big_foot_sighting ADD longitude NUMERIC(8, 6) NOT NULL');
+        $this->addSql('ALTER TABLE big_foot_sighting ADD COLUMN IF NOT EXISTS longitude NUMERIC(8, 6) NOT NULL');
     }
 
     public function down(Schema $schema) : void
