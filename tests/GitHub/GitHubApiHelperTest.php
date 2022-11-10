@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\GotHub;
+namespace App\Tests\GitHub;
 
 use App\GitHub\GitHubApiHelper;
 use App\GitHub\GitHubOrganization;
