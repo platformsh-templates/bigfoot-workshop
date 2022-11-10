@@ -2,7 +2,7 @@ tests:
   "Pages should be fast enough":
     path: "/.*" # run the assertions for all HTTP requests
     assertions:
-      - "main.wall_time < 100ms" # wall clock time is less than 100ms
+      - "main.wall_time < 200ms" # wall clock time is less than 100ms
 
 scenarios: |
   #!blackfire-player
