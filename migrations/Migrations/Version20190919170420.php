@@ -23,7 +23,7 @@ final class Version20190919170420 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE "user" ADD COLUMN IF NOT EXISTS username VARCHAR(100) NOT NULL');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649F85E0677 ON "user" (username)');
+        $this->addSql('CREATE UNIQUE INDEX IF NOT EXISTS UNIQ_8D93D649F85E0677 ON "user" (username)');
     }
 
     public function down(Schema $schema) : void
