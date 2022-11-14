@@ -31,8 +31,42 @@ list_org_projects () {
 #   $1: Organization, as it appears in console.platform.sh.
 get_org_projects () {
     PROJECTS_LIST=$(platform project:list -o $1 --pipe)
-    PROJECTS=($PROJECTS_LIST)
+
+    PROJECTS=()
+    while read -r line; do
+       PROJECTS+=("$line")
+    done <<< "$PROJECTS_LIST"
 }
+
+test_get_project_list() {
+
+      printf "test project:list with simple array conversion"
+      PROJECTS_LIST=$(platform project:list -o $1 --pipe)
+      PROJECTS=($PROJECTS_LIST)
+
+      for PROJECT in ${PROJECTS[@]}
+      do
+        printf "\nproject name: $PROJECT:\n"
+      done;
+
+      printf "test project:list with loop conversion"
+      PROJECTS_LIST=$(platform project:list -o $1 --pipe)
+      PROJECTS=()
+      while read -r line; do
+         PROJECTS+=("$line")
+      done <<< "$PROJECTS_LIST"
+
+      for PROJECT in ${PROJECTS[@]}
+      do
+        printf "\nproject name: $PROJECT:\n"
+      done;
+}
+
+
+
+
+
+
 
 # add_project_var: Add a project level environment variable.
 #   Note: makes a boolean variable REDEPLOY available to subsequent scripts.
@@ -158,7 +192,7 @@ add_projectlevel_var () {
     list_org_projects $1
     get_org_projects $1
     TARGET_ENV=$2
-    for PROJECT in "${PROJECTS[@]}"
+    for PROJECT in ${PROJECTS[@]}
     do
         printf "\nAdding variable to project $PROJECT:\n"
         # Ensure the target environment exists, is active, and up-to-date with its parent.
