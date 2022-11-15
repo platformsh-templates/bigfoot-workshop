@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+if [ -n "$ZSH_VERSION" ]; then emulate -L ksh; fi
 ######################################################
 # Some fleet maintenance demo scripts, using the CLI.
 #
@@ -31,23 +31,22 @@ list_org_projects () {
 #   $1: Organization, as it appears in console.platform.sh.
 get_org_projects () {
     PROJECTS_LIST=$(platform project:list -o $1 --pipe)
-
-    PROJECTS=()
-    while read -r line; do
-       PROJECTS+=("$line")
-    done <<< "$PROJECTS_LIST"
+    PROJECTS=($PROJECTS_LIST)
 }
 
+# simple test to check if projectId list is well interpreted.
+# issue if using bash on MacOs --> please use zsh as defined at the beginning of this file
 test_get_project_list() {
 
       printf "test project:list with simple array conversion"
       PROJECTS_LIST=$(platform project:list -o $1 --pipe)
       PROJECTS=($PROJECTS_LIST)
-
       for PROJECT in ${PROJECTS[@]}
       do
         printf "\nproject name: $PROJECT:\n"
       done;
+
+      printf "";
 
       printf "test project:list with loop conversion"
       PROJECTS_LIST=$(platform project:list -o $1 --pipe)
@@ -61,12 +60,6 @@ test_get_project_list() {
         printf "\nproject name: $PROJECT:\n"
       done;
 }
-
-
-
-
-
-
 
 # add_project_var: Add a project level environment variable.
 #   Note: makes a boolean variable REDEPLOY available to subsequent scripts.
@@ -169,19 +162,24 @@ prepare_environment () {
             PARENT=$DEFAULT_BRANCH
             echo "Creating environment $ENVIRONMENT as a child of the default branch, $PARENT.";
         fi
-        platform environment:branch --project $PROJECT $ENVIRONMENT $PARENT -y -q --force
+
+        # if staging and env:SANITIZE_STAGING=true, sync code and data and then sanitize
+        # else, sync code and data
+        platform environment:branch --project $PROJECT $ENVIRONMENT $PARENT -y -q --force --no-clone-parent
+
     fi
 
     if [ "$ENV_CHECK" = active ]; then
+#        if [  ]
         echo "Environment $ENVIRONMENT already exists. Syncing to its parent."
         platform environment:sync code data --project $PROJECT --environment $ENVIRONMENT -y -q
     fi
 
-    if [ "$ENV_CHECK" = inactive ]; then
-        echo "Environment $ENVIRONMENT already exists, but is inactive. Activating and syncing to its parent."
-        platform environment:activate --project $PROJECT --environment $ENVIRONMENT -y -q
-        platform environment:sync code data --project $PROJECT --environment $ENVIRONMENT -y -q
-    fi
+#    if [ "$ENV_CHECK" = inactive ]; then
+#        echo "Environment $ENVIRONMENT already exists, but is inactive. Activating and syncing to its parent."
+#        platform environment:activate --project $PROJECT --environment $ENVIRONMENT -y -q
+#        platform environment:sync code data --project $PROJECT --environment $ENVIRONMENT -y -q
+#    fi
 }
 
 ######################################################
