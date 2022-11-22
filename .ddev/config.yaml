@@ -19,6 +19,7 @@ web_environment:
 - PLATFORM_APPLICATION_NAME=app
 - PLATFORM_ENVIRONMENT=main
 - PLATFORM_PROJECT=4qqp5j5vtvnom
+- DATABASE_URL=pgsql://db:db@db:5432/db
 nodejs_version: "16"
 
 # Key features of ddev's config.yaml:
