@@ -34,31 +34,14 @@ get_org_projects () {
     PROJECTS=($PROJECTS_LIST)
 }
 
-# simple test to check if projectId list is well interpreted.
-# issue if using bash on MacOs --> please use zsh as defined at the beginning of this file
-test_get_project_list() {
-
-      printf "test project:list with simple array conversion"
-      PROJECTS_LIST=$(platform project:list -o $1 --pipe)
-      PROJECTS=($PROJECTS_LIST)
-      for PROJECT in ${PROJECTS[@]}
-      do
-        printf "\nproject name: $PROJECT:\n"
-      done;
-
-      printf "";
-
-      printf "test project:list with loop conversion"
-      PROJECTS_LIST=$(platform project:list -o $1 --pipe)
-      PROJECTS=()
-      while read -r line; do
-         PROJECTS+=("$line")
-      done <<< "$PROJECTS_LIST"
-
-      for PROJECT in ${PROJECTS[@]}
-      do
-        printf "\nproject name: $PROJECT:\n"
-      done;
+# get_org_projects: Retrieve an array of project IDs for a given organization.
+#   Note: Makes array variable PROJECTS available to subsequent scripts.
+#   $1: Organization, as it appears in console.platform.sh.
+get_project_envs () {
+    unset -f ENV_LIST
+    unset -f ENVS
+    ENV_LIST=$(platform environment:list -p $1 --pipe)
+    ENVS=($ENV_LIST)
 }
 
 # add_project_var: Add a project level environment variable.
@@ -84,7 +67,7 @@ add_project_var () {
 
         REDEPLOY=true
     else
-        echo "Variable $1 already exists. Skipping."
+        printf "\nVariable $1 already exists. Skipping."
         REDEPLOY=false
     fi
 }
@@ -114,7 +97,7 @@ add_env_var () {
             --inheritable true \
             -q
     else
-        echo "Variable $1 already exists. Skipping."
+        printf "\nVariable $1 already exists. Skipping."
     fi
 }
 
@@ -122,7 +105,7 @@ add_env_var () {
 #   $1: Target project ID.
 #   $2: Target environment ID.
 redeploy_env () {
-    echo "Redeploying environment $2 on project $1."
+    printf "\nRedeploying environment $2 on project $1."
     platform redeploy --project $1 --environment $2 -y -q
 }
 
@@ -138,8 +121,20 @@ run_sourceop () {
 #   Note: Makes variable DEFAULT_BRANCH available to subsequent scripts.
 #   $1: Target project ID.
 get_project_default_branch () {
-    unset DEFAULT_BRANCH
+    unset -f DEFAULT_BRANCH
     DEFAULT_BRANCH=$(platform project:info --project $1 default_branch)
+}
+
+get_sanitize_env_var () {
+    printf "\n get SANITIZE_DATA for env $1 platform variable:get -e $1 env:SANITIZE_DATA --property=value"
+    unset -f SANITIZE_DATA
+    SANITIZE_DATA=$(platform variable:get -p $1 -e $2 env:SANITIZE_DATA --property=value)
+}
+
+get_data_sanitized_env_var () {
+    printf "\n get DATA_SANITIZED for env $1 platform variable:get -e $1 env:DATA_SANITIZED --property=value"
+    unset -f DATA_SANITIZED
+    DATA_SANITIZED=$(platform variable:get -p $1 -e $2 env:DATA_SANITIZED --property=value)
 }
 
 # prepare_environment: Verify a target environment exists. If exists sync it to its parent, create otherwise.
@@ -163,23 +158,8 @@ prepare_environment () {
             echo "Creating environment $ENVIRONMENT as a child of the default branch, $PARENT.";
         fi
 
-        # if staging and env:SANITIZE_STAGING=true, sync code and data and then sanitize
-        # else, sync code and data
-        platform environment:branch --project $PROJECT $ENVIRONMENT $PARENT -y -q --force --no-clone-parent
-
+        platform environment:branch --project $PROJECT $ENVIRONMENT $PARENT -y -q --force
     fi
-
-    if [ "$ENV_CHECK" = active ]; then
-#        if [  ]
-        echo "Environment $ENVIRONMENT already exists. Syncing to its parent."
-        platform environment:sync code data --project $PROJECT --environment $ENVIRONMENT -y -q
-    fi
-
-#    if [ "$ENV_CHECK" = inactive ]; then
-#        echo "Environment $ENVIRONMENT already exists, but is inactive. Activating and syncing to its parent."
-#        platform environment:activate --project $PROJECT --environment $ENVIRONMENT -y -q
-#        platform environment:sync code data --project $PROJECT --environment $ENVIRONMENT -y -q
-#    fi
 }
 
 ######################################################
@@ -196,7 +176,7 @@ add_projectlevel_var () {
         # Ensure the target environment exists, is active, and up-to-date with its parent.
         prepare_environment $PROJECT $TARGET_ENV
         # Add the project-level environment variable.
-        add_project_var SANITIZE_STAGING true $PROJECT
+        add_project_var SANITIZE_DATA true $PROJECT
 
         if [ "$REDEPLOY" = true ]; then
             echo "Redeploying affected environments following added variable."
@@ -255,5 +235,36 @@ run_update_so () {
         # Run the source operation on a given environment.
         run_sourceop $OPERATION $PROJECT $TARGET_ENV
 
+    done
+}
+
+sanitize_organization_data () {
+    list_org_projects $1
+    get_org_projects $1
+    for PROJECT in "${PROJECTS[@]}"
+    do
+        printf "\n### Project $PROJECT."
+        # get environments list
+        get_project_envs $PROJECT
+        for ENVIRONMENT in "${ENVS[@]}"
+        do
+          unset -f ENV_CHECK
+          ENV_CHECK=$(platform project:curl -p $PROJECT /environments/$ENVIRONMENT | jq -r '.status')
+
+          if [ "$ENV_CHECK" = active -a "$ENVIRONMENT" != main ]; then
+              get_sanitize_env_var $PROJECT $ENVIRONMENT
+              get_data_sanitized_env_var $PROJECT $ENVIRONMENT
+              if [ "$SANITIZE_DATA" == true -a "$DATA_SANITIZED" != true ]; then
+                printf "\nEnvironment $ENVIRONMENT exists and is not sanitized yet. Sanitizing data."
+                platform ssh -p $PROJECT -e $ENVIRONMENT -- php bin/console app:sanitize-data
+                printf "\nSanitizing data is finished"
+                add_env_var DATA_SANITIZED true $PROJECT $ENVIRONMENT
+              fi
+          elif [ "$ENVIRONMENT" == main ]; then
+                printf "\nEnvironment $ENVIRONMENT is production one, skipping."
+          else
+                printf "\nEnvironment $ENVIRONMENT is not active, skipping."
+          fi
+        done
     done
 }
