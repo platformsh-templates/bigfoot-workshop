@@ -387,9 +387,6 @@
     "symfony/security-csrf": {
         "version": "v4.3.4"
     },
-    "symfony/security-guard": {
-        "version": "v4.3.4"
-    },
     "symfony/security-http": {
         "version": "v4.3.4"
     },
