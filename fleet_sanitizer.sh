@@ -101,14 +101,6 @@ add_env_var () {
     fi
 }
 
-# redeploy_env: Redeploy an environment.
-#   $1: Target project ID.
-#   $2: Target environment ID.
-redeploy_env () {
-    printf "\nRedeploying environment $2 on project $1."
-    platform redeploy --project $1 --environment $2 -y -q
-}
-
 # run_sourceop: Run a source operation on an environment.
 #   $1: Source operation command name, as defined in .platform.app.yaml.
 #   $2: Target project ID.
@@ -125,14 +117,10 @@ get_project_default_branch () {
     DEFAULT_BRANCH=$(platform project:info --project $1 default_branch)
 }
 
-get_sanitize_env_var () {
-    unset -f SANITIZE_DATA
-    SANITIZE_DATA=$(platform variable:get -p $1 -e $2 env:SANITIZE_DATA --property=value)
-}
-
-get_data_sanitized_env_var () {
-    unset -f DATA_SANITIZED
-    DATA_SANITIZED=$(platform variable:get -p $1 -e $2 env:DATA_SANITIZED --property=value)
+get_env_var () {
+    unset -f var
+    declare var="$3"
+    var=$(platform variable:get -p $1 -e $2 env:$3 --property=value)
 }
 
 # prepare_environment: Verify a target environment exists. If exists sync it to its parent, create otherwise.
@@ -215,27 +203,6 @@ add_envlevel_var () {
     done
 }
 
-######################################################
-######################################################
-# Example 3.
-
-run_update_so () {
-    list_org_projects $1
-    get_org_projects $1
-    TARGET_ENV=$2
-    OPERATION=$3
-    for PROJECT in "${PROJECTS[@]}"
-    do
-        printf "\nRunning source operation $OPERATION on environment $TARGET_ENV on project $PROJECT:\n"
-        # Ensure the parent environment exists, is active, and up-to-date with its parent.
-        prepare_environment $PROJECT $TARGET_ENV
-
-        # Run the source operation on a given environment.
-        run_sourceop $OPERATION $PROJECT $TARGET_ENV
-
-    done
-}
-
 sanitize_organization_data () {
     list_org_projects $1
     get_org_projects $1
@@ -250,10 +217,10 @@ sanitize_organization_data () {
           ENV_CHECK=$(platform project:curl -p $PROJECT /environments/$ENVIRONMENT | jq -r '.status')
 
           if [ "$ENV_CHECK" = active -a "$ENVIRONMENT" != main ]; then
-              get_sanitize_env_var $PROJECT $ENVIRONMENT
-              get_data_sanitized_env_var $PROJECT $ENVIRONMENT
+              get_env_var $PROJECT $ENVIRONMENT DATA_SANITIZED
               if [ "$DATA_SANITIZED" != true ]; then
                 printf "\nEnvironment $ENVIRONMENT exists and is not sanitized yet. Sanitizing data."
+                printf "\n"
                 # do sanitization here
                 platform ssh -p $PROJECT -e $ENVIRONMENT -- php bin/console app:sanitize-data
                 printf "\nSanitizing data is finished, redeploying"
