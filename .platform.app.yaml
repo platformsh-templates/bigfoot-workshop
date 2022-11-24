@@ -85,8 +85,5 @@ source:
                 fi
         update-dependencies-2:
             command: |
-                if [ "$PLATFORM_ENVIRONMENT_TYPE" != production ]; then
-                  composer update
-                  git add composer.lock
-                  git commit --allow-empty -m "Dependency updates."
-                fi
+                echo "$PLATFORM_ENVIRONMENT_TYPE"
+                
