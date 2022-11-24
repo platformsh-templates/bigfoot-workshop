@@ -78,12 +78,7 @@ source:
     operations:
         update-dependencies:
             command: |
-                if [ "$PLATFORM_ENVIRONMENT_TYPE" != production ]; then
-                  composer update
-                  git add composer.lock
-                  git commit --allow-empty -m "Dependency updates."
-                fi
-        update-dependencies-2:
-            command: |
-                echo "$PLATFORM_ENVIRONMENT_TYPE"
-                
+                set -e
+                composer update
+                git add composer.lock
+                git commit --allow-empty -m "Dependency updates."
