@@ -2,62 +2,52 @@
 
 namespace App\Entity;
 
+use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @Orm\Table("`user`")
- * @UniqueEntity({"email"}, message="It looks like that email is already registered")
- * @UniqueEntity({"username"}, message="Oh crazy - that username is already taken! Maybe by a Bigfoot?")
- */
-class User implements UserInterface
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: "`user`")]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
-    private $email;
+    #[ORM\Column(type: 'string', unique: true)]
+    #[Assert\Email]
+    private ?string $email = null;
 
-    /**
-     * @ORM\Column(type="string", length=100, unique=true)
-     */
-    private $username;
+    #[ORM\Column(type: 'string', unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 100)]
+    private ?string $username = null;
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     private $roles = [];
 
-    /**
-     * @var string The hashed password
-     * @ORM\Column(type="string")
-     */
-    private $password;
+    #[ORM\Column(type: 'string')]
+    private ?string $password = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\BigFootSighting", mappedBy="owner")
+     * @var BigFootSighting[]|Collection
      */
-    private $bigFootSightings;
+    #[ORM\OneToMany(targetEntity: BigFootSighting::class, mappedBy: "owner")]
+    private Collection $bigFootSightings;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="owner")
+     * @var Comment[]|Collection
      */
-    private $comments;
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: "owner")]
+    private Collection $comments;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $agreedToTermsAt;
+    #[ORM\Column(type: 'datetime')]
+    private \DateTimeInterface $agreedToTermsAt;
 
     public function __construct()
     {
@@ -127,11 +117,14 @@ class User implements UserInterface
     }
 
     /**
-     * @see UserInterface
+     * Returns the salt that was originally used to encode the password.
+     *
+     * {@inheritdoc}
      */
-    public function getSalt()
+    public function getSalt(): ?string
     {
         // not needed when using the "bcrypt" algorithm in security.yaml
+        return null;
     }
 
     /**
@@ -209,5 +202,17 @@ class User implements UserInterface
     public function getUserIdentifier(): string
     {
         return $this->username;
+    }
+
+    public function __serialize(): array
+    {
+        // add $this->salt too if you don't use Bcrypt or Argon2i
+        return [$this->id, $this->username, $this->password];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        // add $this->salt too if you don't use Bcrypt or Argon2i
+        [$this->id, $this->username, $this->password] = $data;
     }
 }

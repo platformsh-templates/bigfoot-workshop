@@ -2,67 +2,52 @@
 
 namespace App\Entity;
 
+use App\Repository\BigFootSightingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\BigFootSightingRepository")
- */
+#[ORM\Entity(repositoryClass: BigFootSightingRepository::class)]
 class BigFootSighting
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
+
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
+    private string $title;
+
+    #[ORM\Column(type: 'text')]
+    private string $description;
+
+    #[ORM\Column(type: 'integer')]
+    private int $confidenceIndex;
+
+    #[ORM\Column(type: 'decimal', precision: 9, scale: 6)]
+    private float $latitude;
+
+    #[ORM\Column(type: 'decimal', precision: 9, scale: 6)]
+    private float $longitude;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'bigFootSightings')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
+
+    #[ORM\Column(type: 'datetime')]
+    private \DateTimeInterface $createdAt;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var Comment[]|Collection
      */
-    private $title;
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: "bigFootSighting")]
+    #[ORM\OrderBy(['createdAt' => 'DESC'])]
+    private Collection $comments;
 
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $description;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $confidenceIndex;
-
-    /**
-     * @ORM\Column(type="decimal", precision=9, scale=6)
-     */
-    private $latitude;
-
-    /**
-     * @ORM\Column(type="decimal", precision=9, scale=6)
-     */
-    private $longitude;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="bigFootSightings")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $owner;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="bigFootSighting")
-     * @ORM\OrderBy({"createdAt"="DESC"})
-     */
-    private $comments;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private $score = 0;
 
     public function __construct()

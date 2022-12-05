@@ -2,41 +2,32 @@
 
 namespace App\Entity;
 
+use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
- */
+
+#[ORM\Entity(repositoryClass: CommentRepository::class)]
+#[ORM\Table(name: "comment")]
 class Comment
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $content;
+    #[ORM\Column(type: 'text')]
+    private ?string $content = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $owner;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comments')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\BigFootSighting", inversedBy="comments")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $bigFootSighting;
+    #[ORM\ManyToOne(targetEntity: BigFootSighting::class, inversedBy: 'comments')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?BigFootSighting $bigFootSighting = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
+    #[ORM\Column(type: 'datetime')]
+    private \DateTimeInterface $createdAt;
 
     public function __construct()
     {

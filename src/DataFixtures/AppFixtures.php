@@ -9,7 +9,9 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+//use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
 
 class AppFixtures extends Fixture
 {
@@ -24,7 +26,7 @@ class AppFixtures extends Fixture
     /** @var BigFootSighting[] */
     private $sightings = [];
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserPasswordHasherInterface $passwordEncoder)
     {
         $this->passwordEncoder = $passwordEncoder;
     }
@@ -48,7 +50,7 @@ class AppFixtures extends Fixture
             $user->setUsername($this->faker->userName);
             $user->setEmail($user->getUsername().'@example.com');
             $user->setPassword(
-                $this->passwordEncoder->encodePassword($user, 'believe')
+                $this->passwordEncoder->hashPassword($user, 'believe')
             );
             $user->setAgreedToTermsAt($this->faker->dateTimeBetween('-6 months', 'now'));
 
