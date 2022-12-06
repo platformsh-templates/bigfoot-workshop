@@ -35,7 +35,7 @@ class BigFootSighting
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'bigFootSightings')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $owner = null;
+    private User $owner;
 
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $createdAt;
@@ -48,7 +48,7 @@ class BigFootSighting
     private Collection $comments;
 
     #[ORM\Column(type: 'integer')]
-    private $score = 0;
+    private ?int $score = 0;
 
     public function __construct()
     {

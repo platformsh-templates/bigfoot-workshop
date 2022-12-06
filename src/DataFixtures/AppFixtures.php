@@ -9,9 +9,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
-//use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-
 
 class AppFixtures extends Fixture
 {
@@ -47,7 +45,7 @@ class AppFixtures extends Fixture
     {
         $this->users = $this->createMany(100, function() {
             $user = new User();
-            $user->setUsername($this->faker->userName);
+            $user->setUsername($this->faker->userName());
             $user->setEmail($user->getUsername().'@example.com');
             $user->setPassword(
                 $this->passwordEncoder->hashPassword($user, 'believe')

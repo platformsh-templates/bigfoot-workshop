@@ -29,7 +29,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $username = null;
 
     #[ORM\Column(type: 'json')]
-    private $roles = [];
+    private array $roles = [];
 
     #[ORM\Column(type: 'string')]
     private ?string $password = null;
@@ -37,13 +37,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var BigFootSighting[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: BigFootSighting::class, mappedBy: "owner")]
+    #[ORM\OneToMany(mappedBy: "owner", targetEntity: BigFootSighting::class)]
     private Collection $bigFootSightings;
 
     /**
      * @var Comment[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: "owner")]
+    #[ORM\OneToMany(mappedBy: "owner", targetEntity: Comment::class)]
     private Collection $comments;
 
     #[ORM\Column(type: 'datetime')]
