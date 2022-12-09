@@ -5,7 +5,7 @@
 name: app
 
 # The type of the application to build.
-type: php:8.2
+type: php:8.1
 
 dependencies:
     php:
@@ -23,6 +23,7 @@ runtime:
         - sodium
         - xsl
         - pdo_pgsql
+#        - redis
 
 variables:
     env:
@@ -49,6 +50,7 @@ hooks:
 # side is in the form `<service name>:<endpoint name>`.
 relationships:
     database: "db:postgresql"
+#    rediscache: "cache:redis"
 
 # The size of the persistent disk of the application (in MB).
 disk: 2048
