@@ -15,27 +15,20 @@ class SanitizeDataCommand extends Command
 {
     protected static $defaultName = 'app:sanitize-data';
 
-    /** @var UserRepository */
-    private $userRepository;
-
-    /** @var EntityManagerInterface */
-    private $entityManager;
+    protected static $defaultDescription = 'Sanitize user data (username and email).';
 
     public function __construct(
-        UserRepository $userRepository,
-        EntityManagerInterface $entityManager
+        private UserRepository $userRepository,
+        private EntityManagerInterface $entityManager
     )
     {
-        $this->userRepository = $userRepository;
-        $this->entityManager = $entityManager;
-
         parent::__construct();
     }
 
     protected function configure()
     {
         $this
-            ->setDescription('Sanitize user datas')
+            ->setDescription('This command allows you to sanitize user data (username and email).')
         ;
     }
 

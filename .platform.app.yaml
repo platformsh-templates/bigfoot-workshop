@@ -82,3 +82,7 @@ source:
                 composer update
                 git add composer.lock
                 git commit --allow-empty -m "Dependency updates."
+            sanitize-data:
+                command: |
+                    set -e
+                    php bin/console app:sanitize-data
