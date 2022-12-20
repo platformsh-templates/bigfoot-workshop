@@ -18,7 +18,7 @@ composer_version: "2"
 web_environment:
 - PLATFORM_APPLICATION_NAME=app
 - PLATFORM_ENVIRONMENT=main
-- PLATFORM_PROJECT=4qqp5j5vtvnom
+- PLATFORM_PROJECT=llynyw5ygskhg
 - DATABASE_URL=pgsql://db:db@db:5432/db
 nodejs_version: "16"
 
