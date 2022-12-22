@@ -13,14 +13,8 @@ class UpdateSightingScoresCommand extends Command
 {
     protected static $defaultName = 'app:update-sighting-scores';
 
-    private $bigFootSightingRepository;
-    private $entityManager;
-
-    public function __construct(BigFootSightingRepository $bigFootSightingRepository, EntityManagerInterface $entityManager)
+    public function __construct(private BigFootSightingRepository $bigFootSightingRepository, private EntityManagerInterface $entityManager)
     {
-        $this->bigFootSightingRepository = $bigFootSightingRepository;
-        $this->entityManager = $entityManager;
-
         parent::__construct();
     }
 

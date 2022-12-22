@@ -15,8 +15,12 @@ class SecurityController extends AbstractController
     use TargetPathTrait;
 
     #[Route('/login', name: 'app_login')]
-    public function login(Request $request, AuthenticationUtils $authenticationUtils, UserRepository $userRepository): Response
-    {
+    public function login(
+        Request $request,
+        AuthenticationUtils
+        $authenticationUtils,
+        UserRepository $userRepository
+    ): Response {
         if ($this->getUser()) {
             $this->redirectToRoute('app_homepage');
         }
@@ -45,7 +49,7 @@ class SecurityController extends AbstractController
      * and handle the logout automatically. See logout in config/packages/security.yaml
      */
     #[Route('/logout', name: 'app_logout')]
-    public function logout()
+    public function logout(): void
     {
         throw new \Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
     }

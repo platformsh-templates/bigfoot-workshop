@@ -9,16 +9,14 @@ use App\GitHub\GitHubApiHelper;
 use App\Repository\BigFootSightingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class MainController extends AbstractController
 {
-    /**
-     * @Route("/", name="app_homepage")
-     */
+    #[Route('/', name: 'app_homepage')]
     public function homepage(BigFootSightingRepository $bigFootSightingRepository)
     {
         $sightings = $this->createSightingsPaginator(1, $bigFootSightingRepository);
@@ -28,9 +26,7 @@ class MainController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/_sightings", name="app_sightings_partial_list")
-     */
+    #[Route('/_sightings', name: 'app_sightings_partial_list')]
     public function loadSightingsPartial(BigFootSightingRepository $bigFootSightingRepository, Request $request)
     {
         // simple pagination!
@@ -49,9 +45,7 @@ class MainController extends AbstractController
         return $this->json($data);
     }
 
-    /**
-     * @Route("/api/github-organization", name="app_github_organization_info")
-     */
+    #[Route('/api/github-organization', name: 'app_github_organization_info')]
     public function gitHubOrganizationInfo(GitHubApiHelper $apiHelper)
     {
         $organizationName = 'SymfonyCasts';
@@ -64,9 +58,7 @@ class MainController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/sighting/{id}", name="app_sighting_show")
-     */
+    #[Route('/sighting/{id}', name: 'app_sighting_show')]
     public function showSighting(BigFootSighting $bigFootSighting)
     {
         return $this->render('main/sighting_show.html.twig', [
@@ -74,10 +66,8 @@ class MainController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/terms/updated", name="agree_terms_update")
-     * @IsGranted("ROLE_USER")
-     */
+    #[Route('/terms/updated', name: 'agree_terms_update')]
+    #[IsGranted('ROLE_USER')]
     public function agreeUpdatedTerms(Request $request, EntityManagerInterface $entityManager)
     {
         $form = $this->createForm(AgreeToUpdatedTermsFormType::class);
@@ -99,9 +89,7 @@ class MainController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/about", name="app_about")
-     */
+    #[Route('/about', name: 'app_about')]
     public function about()
     {
         return $this->render('main/about.html.twig');

@@ -13,20 +13,17 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-    private $passwordEncoder;
     /** @var ObjectManager */
     private $objectManager;
+
     /** @var Generator */
     private $faker;
 
-    /** @var User[] */
-    private $users = [];
-    /** @var BigFootSighting[] */
-    private $sightings = [];
-
-    public function __construct(UserPasswordHasherInterface $passwordEncoder)
-    {
-        $this->passwordEncoder = $passwordEncoder;
+    public function __construct(
+        private UserPasswordHasherInterface $passwordEncoder,
+        private array $users = [],
+        private array $sightings = []
+    ) {
     }
 
     public function load(ObjectManager $manager)
@@ -45,7 +42,7 @@ class AppFixtures extends Fixture
     {
         $this->users = $this->createMany(100, function() {
             $user = new User();
-            $user->setUsername($this->faker->userName());
+            $user->setUsername($this->faker->userName);
             $user->setEmail($user->getUsername().'@example.com');
             $user->setPassword(
                 $this->passwordEncoder->hashPassword($user, 'believe')
@@ -62,7 +59,7 @@ class AppFixtures extends Fixture
             $sighting = new BigFootSighting();
             $sighting->setOwner($this->users[array_rand($this->users)]);
             $sighting->setTitle($this->faker->realText(80));
-            $sighting->setDescription($this->faker->paragraph);
+            $sighting->setDescription($this->faker->paragraph(5));
             $sighting->setConfidenceIndex(rand(1, 10));
             $sighting->setLatitude($this->faker->latitude);
             $sighting->setLongitude($this->faker->longitude);

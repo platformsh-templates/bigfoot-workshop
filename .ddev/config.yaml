@@ -1,7 +1,7 @@
-name: sfcon-bigfoot1-workshop
+name: bigfoot-workshop
 type: php
 docroot: public
-php_version: "8.1"
+php_version: "8.2"
 webserver_type: nginx-fpm
 router_http_port: "80"
 router_https_port: "443"
@@ -15,11 +15,7 @@ nfs_mount_enabled: false
 mutagen_enabled: false
 use_dns_when_possible: true
 composer_version: "2"
-web_environment:
-- PLATFORM_APPLICATION_NAME=app
-- PLATFORM_ENVIRONMENT=main
-- PLATFORM_PROJECT=llynyw5ygskhg
-- DATABASE_URL=pgsql://db:db@db:5432/db
+web_environment: []
 nodejs_version: "16"
 
 # Key features of ddev's config.yaml:

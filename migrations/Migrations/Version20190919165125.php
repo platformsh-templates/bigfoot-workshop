@@ -24,11 +24,9 @@ final class Version20190919165125 extends AbstractMigration
 
         $this->addSql('CREATE SEQUENCE IF NOT EXISTS user_id_seq;');
         $this->addSql("CREATE TABLE IF NOT EXISTS \"user\" (id INT DEFAULT NEXTVAL ('user_id_seq') NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, CONSTRAINT UNIQ_8D93D649E7927C74 UNIQUE (email), PRIMARY KEY(id)) ");
-//        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
 
-        $this->addSql('CREATE SEQUENCE IF NOT EXISTS big_foot_sighting_seq;');
-        $this->addSql("CREATE TABLE IF NOT EXISTS big_foot_sighting (id INT DEFAULT NEXTVAL ('big_foot_sighting_seq') NOT NULL, title VARCHAR(255) NOT NULL, description TEXT NOT NULL, confidence_index INT NOT NULL, latitude NUMERIC(8, 6) NOT NULL, PRIMARY KEY(id))");
-//        $this->addSql('CREATE TABLE big_foot_sighting (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) NOT NULL, description LONGTEXT NOT NULL, confidence_index INT NOT NULL, latitude NUMERIC(8, 6) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE SEQUENCE IF NOT EXISTS big_foot_sighting_id_seq;');
+        $this->addSql("CREATE TABLE IF NOT EXISTS big_foot_sighting (id INT DEFAULT NEXTVAL ('big_foot_sighting_id_seq') NOT NULL, title VARCHAR(255) NOT NULL, description TEXT NOT NULL, confidence_index INT NOT NULL, latitude NUMERIC(8, 6) NOT NULL, PRIMARY KEY(id))");
     }
 
     public function down(Schema $schema) : void
