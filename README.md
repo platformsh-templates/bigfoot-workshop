@@ -13,7 +13,7 @@ To get it working, pour some coffee or tea, and follow these steps:
 1. run `ddev doctrine:fixtures:load`
 1. run `ddev launch`
 
-##Blackfire
+## Blackfire
 Make sure you have access to: <BR>
 https://blackfire.io/envs/7455801e-cfc2-4c54-aec8-b72f1d02f2e9/profiles <BR>
 If not, DM your favorite trainer with the email address associated with your Blackfire account.
@@ -23,7 +23,7 @@ https://blackfire.io/docs/integrations/paas/ddev <br>
 Make sure to select the workshop environment to have the correct credentials auto-filled.<br>
 
 
-##Get Started with DDEV - DDEV Docs
+## Get Started with DDEV - DDEV Docs
 Do local website development on your computer or in the cloud with DDEV.
 ddev.readthedocs.ioddev.readthedocs.io
 
