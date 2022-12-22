@@ -10,7 +10,7 @@ To get it working, pour some coffee or tea, and follow these steps:
 1. run `cp .env .env.local`
 1. run `ddev composer install`
 1. run `ddev php bin/console doctrine:schema:update --force`
-1. run `ddev php bin/console doctrine:fixtures:load`
+1. run `ddev php bin/console doctrine:fixtures:load -n`
 1. run `ddev launch`
 
 ## Blackfire
