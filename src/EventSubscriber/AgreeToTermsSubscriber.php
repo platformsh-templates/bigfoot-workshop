@@ -14,17 +14,12 @@ use Twig\Environment;
 
 class AgreeToTermsSubscriber implements EventSubscriberInterface
 {
-    private $security;
-    private $formFactory;
-    private $twig;
-    private $entrypointLookup;
-
-    public function __construct(Security $security, FormFactoryInterface $formFactory, Environment $twig, EntrypointLookupInterface $entrypointLookup)
-    {
-        $this->security = $security;
-        $this->formFactory = $formFactory;
-        $this->twig = $twig;
-        $this->entrypointLookup = $entrypointLookup;
+    public function __construct(
+        private Security $security,
+        private FormFactoryInterface $formFactory,
+        private Environment $twig,
+        private EntrypointLookupInterface $entrypointLookup
+    ) {
     }
 
     public function onRequestEvent(RequestEvent $event)
