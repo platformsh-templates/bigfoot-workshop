@@ -6,15 +6,11 @@ use App\Entity\User;
 use App\Service\CommentHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
-use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
 {
-    private $commentHelper;
-
-    public function __construct(CommentHelper $commentHelper)
+    public function __construct(private CommentHelper $commentHelper)
     {
-        $this->commentHelper = $commentHelper;
     }
 
     public function getFilters(): array
