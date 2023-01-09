@@ -13,7 +13,7 @@
         "bootstrap-tagsinput": "^0.7.1",
         "bootswatch": "^3.3.7",
         "core-js": "^3.23.0",
-        "eonasdan-bootstrap-datetimepicker": "^4.17.47",
+        "eonasdan-bootstrap-datetimepicker": "^4.15.35",
         "file-loader": "^6.0.0",
         "highlight.js": "^11.5.1",
         "imports-loader": "^0.8.0",
