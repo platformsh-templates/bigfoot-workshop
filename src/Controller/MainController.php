@@ -48,7 +48,7 @@ class MainController extends AbstractController
     #[Route('/api/github-organization', name: 'app_github_organization_info')]
     public function gitHubOrganizationInfo(GitHubApiHelper $apiHelper)
     {
-        $organizationName = 'SymfonyCasts';
+        $organizationName = 'platformsh-templates'; // 'SymfonyCasts';
         $organization = $apiHelper->getOrganizationInfo($organizationName);
         $repositories = $apiHelper->getOrganizationRepositories($organizationName);
 

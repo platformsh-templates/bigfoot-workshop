@@ -13,7 +13,7 @@ export default function(wrapperEl) {
         const listHtml = response.data.repositories.map(repository => {
             return `
 <div class="divTableRow sightingLink">
-    <div class="divTableCell"><a class="text-white" href="${repository.url}">
+    <div class="divTableCell"><a class="text-white" href="${repository.url}" target="_blank">
             ${repository.name}
         </a>
     </div>

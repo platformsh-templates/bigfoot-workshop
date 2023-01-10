@@ -12,7 +12,7 @@ class GitHubApiHelper
 
     public function getOrganizationInfo(string $organization): GitHubOrganization
     {
-        $response = $this->httpClient->request('GET', 'https://api.github.com/orgs/'.$organization);
+        $response = $this->httpClient->request('GET', 'https://api.github.com/orgs/'.$organization.'?per_page=200&sort=updated&type=all');
 
         $data = $response->toArray();
 
@@ -27,7 +27,8 @@ class GitHubApiHelper
      */
     public function getOrganizationRepositories(string $organization): array
    {
-       $response = $this->httpClient->request('GET', sprintf('https://api.github.com/orgs/%s/repos', $organization));
+
+       $response = $this->httpClient->request('GET', sprintf('https://api.github.com/orgs/%s/repos?per_page=200&sort=updated&type=all', $organization));
 
        $data = $response->toArray();
 
