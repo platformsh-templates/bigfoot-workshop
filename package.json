@@ -8,12 +8,11 @@
         "@symfony/webpack-encore": "^4.0",
         "axios": "^0.21.4",
         "bloodhound-js": "^1.2.3",
-        "bootstrap": "^3.3",
+        "bootstrap": "^4.3.1",
         "bootstrap-sass": "^3.3.7",
         "bootstrap-tagsinput": "^0.7.1",
         "bootswatch": "^3.3.7",
         "core-js": "^3.23.0",
-        "eonasdan-bootstrap-datetimepicker": "^4.17.47",
         "file-loader": "^6.0.0",
         "highlight.js": "^11.5.1",
         "imports-loader": "^0.8.0",
@@ -37,5 +36,9 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
-    }
+    },
+    "dependencies": {
+        "popper.js": "^1.16.1"
+    },
+    "version": "0.0.0"
 }
