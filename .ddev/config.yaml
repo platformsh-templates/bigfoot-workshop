@@ -18,6 +18,9 @@ composer_version: "2"
 web_environment:
   - DATABASE_URL=pgsql://db:db@db:5432/db
 nodejs_version: "16"
+hooks:
+  post-start:
+    - exec-host: 'ddev blackfire on'
 
 # Key features of ddev's config.yaml:
 
