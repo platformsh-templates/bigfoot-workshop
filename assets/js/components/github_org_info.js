@@ -12,31 +12,32 @@ export default function(wrapperEl) {
 
         const listHtml = response.data.repositories.map(repository => {
             return `
-<tr>
-    <td>
-    <a class="text-white" href="${repository.url}">${repository.name}</a> 
-    </td>
-    <td class="table-content">
-    ${moment(repository.updatedAt).fromNow()}
-    </td>
-</tr>
+<div class="divTableRow sightingLink">
+    <div class="divTableCell"><a class="text-white" href="${repository.url}">
+            ${repository.name}
+        </a>
+    </div>
+    <div class="divTableCell">
+        <time class="table-content" datetime="${moment(repository.updatedAt).fromNow()}">${moment(repository.updatedAt).fromNow()}</time>
+    </div>
+</div>
             `;
         });
 
         const html = `
         <h3>${organization.name} Repos</h3>
         <small>${organization.repositoryCount} public repositories</small>
-        <table class="table table-striped table-dark table-borderless table-hover">
-            <thead>
-                <tr class="bg-info">
-                    <th>Repo Name</th>
-                    <th>Updated</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="divTable table table-striped table-dark table-borderless table-hover">
+            <div class="divTableHeading">
+                <div class="divTableRow bg-info">
+                    <div class="divTableHead">Repo Name</div>
+                    <div class="divTableHead">Updated</div>
+                </div>
+            </div>
+            <div class="divTableBody">
                 ${listHtml.join('')}
-            </tbody>
-        </table>
+            </div>
+        </div>
         `;
 
         wrapperEl.insertAdjacentHTML('beforeend', html);

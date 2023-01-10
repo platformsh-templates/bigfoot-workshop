@@ -35,3 +35,51 @@ body {
     background-color: #343a40;
     border-radius: 5px;
 }
+
+/* DivTable.com */
+.divTable{
+    display: table;
+    width: 100%;
+}
+.divTableRow {
+    display: table-row;
+    padding: 0.75rem;
+}
+.divTableCell, .divTableHead {
+    /*border: 1px solid #999999;*/
+    display: table-cell;
+    padding: 3px 10px;
+}
+.divTableHeading {
+    background-color: #EEE;
+    display: table-header-group;
+    font-weight: bold;
+}
+.divTableFoot {
+    background-color: #EEE;
+    display: table-footer-group;
+    font-weight: bold;
+}
+.divTableBody {
+    display: table-row-group;
+}
+
+.table-dark.table-striped .divTableRow:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.table-dark.table-hover .divTableRow:hover {
+    background-color: rgba(255, 255, 255, 0.075);
+}
+
+.sightingLink {
+    cursor: pointer;
+}
+
+.table-dark.table-hover .sightingLink.divTableRow:hover .divTableCell {
+    text-decoration: underline;
+}
+
+/*a {*/
+/*    display: block;*/
+/*}*/
