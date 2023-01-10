@@ -1657,10 +1657,10 @@ bootstrap-tagsinput@^0.7.1:
   resolved "https://registry.npmjs.org/bootstrap-tagsinput/-/bootstrap-tagsinput-0.7.1.tgz"
   integrity sha512-xSks67GWgXLnmO5gqp788vhh7WoXd9mHj5uKE5zg8rvw3sNYYSCjrSlrPRlPdpYKwmuxeuf2jsNjBSWEucyB1w==
 
-bootstrap@^3.0, bootstrap@^3.3:
-  version "3.4.1"
-  resolved "https://registry.npmjs.org/bootstrap/-/bootstrap-3.4.1.tgz"
-  integrity sha512-yN5oZVmRCwe5aKwzRj6736nSmKDX7pLYwsXiCj/EYmo16hODaBiT4En5btW/jhBF/seV+XMx3aYwukYC3A49DA==
+bootstrap@^4.3.1:
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.6.2.tgz#8e0cd61611728a5bf65a3a2b8d6ff6c77d5d7479"
+  integrity sha512-51Bbp/Uxr9aTuy6ca/8FbFloBUJZLHwnhTcnjIeRn2suQWsWzcuJhGjKDB5eppVte/8oCdOL3VuwxvZDUggwGQ==
 
 bootswatch@^3.3.7:
   version "3.4.1"
@@ -2227,15 +2227,6 @@ envinfo@^7.7.3:
   version "7.8.1"
   resolved "https://registry.npmjs.org/envinfo/-/envinfo-7.8.1.tgz"
   integrity sha512-/o+BXHmB7ocbHEAs6F2EnG0ogybVVUdkRunTT2glZU9XAaGmhqskrvKwqXuDfNjEO0LZKWdejEEpnq8aM0tOaw==
-
-eonasdan-bootstrap-datetimepicker@^4.15.35:
-  version "4.15.35"
-  resolved "https://registry.npmjs.org/eonasdan-bootstrap-datetimepicker/-/eonasdan-bootstrap-datetimepicker-4.15.35.tgz"
-  integrity sha512-HPA1R51V+OKXK3wijZ7xqxrTP4IFsSrDxsdlzHJ/1/a7xm0hvs1ISUxRWGHFrJYzxPHf+N0S3VGo8C9Axrzfog==
-  dependencies:
-    bootstrap "^3.0"
-    jquery ">=1.8.3 <2.2.0"
-    moment "~2.8"
 
 error-stack-parser@^2.0.0:
   version "2.1.4"
@@ -2894,11 +2885,6 @@ jquery@>=1.7, jquery@^3.5.1:
   resolved "https://registry.npmjs.org/jquery/-/jquery-3.6.3.tgz"
   integrity sha512-bZ5Sy3YzKo9Fyc8wH2iIQK4JImJ6R0GWI9kL1/k7Z91ZBNgkRXE6U0JfHIizZbort8ZunhSI3jw9I6253ahKfg==
 
-"jquery@>=1.8.3 <2.2.0":
-  version "2.1.4"
-  resolved "https://registry.npmjs.org/jquery/-/jquery-2.1.4.tgz"
-  integrity sha512-wWR+eCq/T/Qt0NcFyM+QVho0ZVzWxFYANijmSMImXiM5mjr1aOaf4SF0eOEPc92bbK2L2vDpxw3lIszus7eO8Q==
-
 js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz"
@@ -3137,11 +3123,6 @@ moment-timezone@^0.5.40:
   version "2.29.4"
   resolved "https://registry.npmjs.org/moment/-/moment-2.29.4.tgz"
   integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
-
-moment@~2.8:
-  version "2.8.4"
-  resolved "https://registry.npmjs.org/moment/-/moment-2.8.4.tgz"
-  integrity sha512-PZTKkUyBuAAZvh20DslqxFYSTVsB7J5gdzJ9WS67XynvWsXPkDSqtkVMJrLQCGB2+tGwvDFbVhe6l6BK/ER86A==
 
 ms@2.0.0:
   version "2.0.0"
@@ -3401,6 +3382,11 @@ pkg-up@^3.1.0:
   integrity sha512-nDywThFk1i4BQK4twPQ6TA4RT8bDY96yeuCVBWL3ePARCiEKDRSrNGbFIgUJpLp+XeIR65v8ra7WuJOFUBtkMA==
   dependencies:
     find-up "^3.0.0"
+
+popper.js@^1.16.1:
+  version "1.16.1"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.16.1.tgz#2a223cb3dc7b6213d740e40372be40de43e65b1b"
+  integrity sha512-Wb4p1J4zyFTbM+u6WuO4XstYx4Ky9Cewe4DWrel7B0w6VVICvPwdOpotjzcf6eD8TsckVnIMNONQyPIUFOUbCQ==
 
 postcss-calc@^8.2.3:
   version "8.2.4"
