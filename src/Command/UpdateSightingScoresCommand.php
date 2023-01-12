@@ -40,8 +40,9 @@ class UpdateSightingScoresCommand extends Command
 
             $score = ceil(min($characterCount / 500, 10));
             $sighting->setScore($score);
-            $this->entityManager->flush();
         }
+
+        $this->entityManager->flush();
         $io->progressFinish();
 
         return static::SUCCESS;
