@@ -43,7 +43,7 @@ class BigFootSighting
     /**
      * @var Comment[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: "bigFootSighting")]
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: "bigFootSighting", fetch: "EXTRA_LAZY")]
     #[ORM\OrderBy(['createdAt' => 'DESC'])]
     private Collection $comments;
 
