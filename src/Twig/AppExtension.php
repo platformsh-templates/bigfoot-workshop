@@ -9,7 +9,7 @@ use Twig\TwigFilter;
 
 class AppExtension extends AbstractExtension
 {
-    public function __construct(private CommentHelper $commentHelper)
+    public function __construct(private CommentHelper $commentHelper, private $userStatuses = [])
     {
     }
 
@@ -21,6 +21,15 @@ class AppExtension extends AbstractExtension
     }
 
     public function getUserActivityText(User $user): string
+    {
+        if (!isset($this->userStatuses[$user->getId()])) {
+            $this->userStatuses[$user->getId()] = $this->calculateUserActivityText($user);
+        }
+
+        return $this->userStatuses[$user->getId()];
+    }
+
+    private function calculateUserActivityText(User $user): string
     {
         $commentCount = $this->commentHelper->countRecentCommentsForUser($user);
 
