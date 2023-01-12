@@ -24,7 +24,8 @@ class BigFootSightingRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('big_foot_sighting')
             ->leftJoin('big_foot_sighting.comments', 'comments')
-            ->addSelect('comments')
+            ->groupBy('big_foot_sighting.id')
+            ->addSelect('COUNT(comments.id) as comments_count')
             ->setMaxResults($maxResults)
             ->orderBy('big_foot_sighting.createdAt', 'DESC');
     }
