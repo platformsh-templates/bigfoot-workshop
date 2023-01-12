@@ -2,29 +2,31 @@
 
 namespace App\GitHub;
 
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class GitHubApiHelper
 {
     public function __construct(
         private HttpClientInterface $httpClient,
-        private array $githubOrganizations = []
+        private CacheInterface $cache
     )
     {
     }
 
     public function getOrganizationInfo(string $organization): GitHubOrganization
     {
-        // optimization in case getOrganizationRepositories is called first
-        if (isset($this->githubOrganizations[$organization])) {
-            return $this->githubOrganizations[$organization];
-        }
+        $key = sprintf('github_organization_%s', $organization);
 
-        $response = $this->httpClient->request('GET', 'https://api.github.com/orgs/' . $organization . '?per_page=200&sort=updated&type=all');
+        $data = $this->cache->get($key, function (ItemInterface $item) use ($organization) {
+            $item->expiresAfter(3600);
+            $response = $this->httpClient->request('GET', 'https://api.github.com/orgs/' . $organization . '?per_page=200&sort=updated&type=all');
 
-        $data = $response->toArray();
+            return $response->toArray();
+        });
 
-        return $this->githubOrganizations[$data['name']] = new GitHubOrganization(
+        return new GitHubOrganization(
             $data['name'],
             $data['public_repos']
         );
@@ -35,32 +37,39 @@ class GitHubApiHelper
      */
     public function getOrganizationRepositories(string $organization): array
     {
-        $response = $this->httpClient->request('GET', sprintf('https://api.github.com/orgs/%s/repos?per_page=200&sort=updated&type=all', $organization));
+        $key = sprintf('github_repositories_%s', $organization);
 
-        $data = $response->toArray();
+        return $this->cache->get($key, function (ItemInterface $item) use ($organization) {
+            $item->expiresAfter(3600);
 
-        $repositories = [];
-        $publicRepoCount = 0;
-        foreach ($data as $repoData) {
-            $repositories[] = new GitHubRepository(
-                $repoData['name'],
-                $repoData['html_url'],
-                \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s\Z', $repoData['updated_at'])
-            );
+            $response = $this->httpClient->request('GET', sprintf('https://api.github.com/orgs/%s/repos?per_page=200&sort=updated&type=all', $organization));
 
-            if ($repoData['private'] === false) {
-                ++$publicRepoCount;
+            $data = $response->toArray();
+
+            $repositories = [];
+            $publicRepoCount = 0;
+            foreach ($data as $repoData) {
+                $repositories[] = new GitHubRepository(
+                    $repoData['name'],
+                    $repoData['html_url'],
+                    \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s\Z', $repoData['updated_at'])
+                );
+
+                if ($repoData['private'] === false) {
+                    ++$publicRepoCount;
+                }
             }
-        }
 
-        if (!isset($this->githubOrganizations[$organization])) {
-            $this->githubOrganizations[$organization] = new GitHubOrganization(
-                $data[0]['owner']['login'],
-                $publicRepoCount
-            );
-        }
+            // Store in cache organization info as it exists in this Response
+            $keyOrganization = sprintf('github_organization_%s', $organization);
+            $this->cache->get($keyOrganization, function (ItemInterface $itemOrganization) use ($organization) {
+                $itemOrganization->expiresAfter(3600);
+                $response = $this->httpClient->request('GET', 'https://api.github.com/orgs/' . $organization . '?per_page=200&sort=updated&type=all');
 
-        return $repositories;
+                return $response->toArray();
+            });
+
+            return $repositories;
+        });
     }
-
 }
