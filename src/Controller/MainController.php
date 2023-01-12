@@ -21,9 +21,15 @@ class MainController extends AbstractController
     {
         $sightings = $this->createSightingsPaginator(1, $bigFootSightingRepository);
 
-        return $this->render('main/homepage.html.twig', [
+        $probe = \BlackfireProbe::getMainInstance();
+        $probe->enable();
+
+        $response = $this->render('main/homepage.html.twig', [
             'sightings' => $sightings
         ]);
+
+        $probe->disable();
+        return $response;
     }
 
     #[Route('/_sightings', name: 'app_sightings_partial_list')]
