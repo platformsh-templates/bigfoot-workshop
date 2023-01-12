@@ -20,7 +20,7 @@ final class Version20190919171138 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('CREATE SEQUENCE IF NOT EXISTS comment_id_seq;');
         $this->addSql("CREATE TABLE IF NOT EXISTS comment (id INT DEFAULT NEXTVAL ('comment_id_seq') NOT NULL, owner_id INT NOT NULL, big_foot_sighting_id INT NOT NULL, content TEXT NOT NULL, created_at TIMESTAMP(0) NOT NULL, PRIMARY KEY(id))");
@@ -36,7 +36,7 @@ final class Version20190919171138 extends AbstractMigration
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('DROP TABLE comment');
     }

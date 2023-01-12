@@ -20,7 +20,7 @@ final class Version20190919170603 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('ALTER TABLE big_foot_sighting ADD COLUMN IF NOT EXISTS owner_id INT NOT NULL');
         $this->addSql('ALTER TABLE big_foot_sighting DROP CONSTRAINT IF EXISTS FK_4CA856637E3C61F9');
@@ -31,7 +31,7 @@ final class Version20190919170603 extends AbstractMigration
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('ALTER TABLE big_foot_sighting DROP FOREIGN KEY FK_4CA856637E3C61F9');
         $this->addSql('DROP INDEX IDX_4CA856637E3C61F9 ON big_foot_sighting');
