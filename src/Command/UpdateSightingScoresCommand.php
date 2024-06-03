@@ -4,17 +4,19 @@ namespace App\Command;
 
 use App\Repository\BigFootSightingRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(name: 'app:update-sighting-scores')]
 class UpdateSightingScoresCommand extends Command
 {
-    protected static $defaultName = 'app:update-sighting-scores';
-
-    public function __construct(private BigFootSightingRepository $bigFootSightingRepository, private EntityManagerInterface $entityManager)
-    {
+   public function __construct(
+    private BigFootSightingRepository $bigFootSightingRepository,
+    private EntityManagerInterface $entityManager
+    ) {
         parent::__construct();
     }
 
@@ -25,7 +27,7 @@ class UpdateSightingScoresCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
