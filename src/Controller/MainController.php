@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class MainController extends AbstractController
@@ -48,7 +48,7 @@ class MainController extends AbstractController
     #[Route('/api/github-organization', name: 'app_github_organization_info')]
     public function gitHubOrganizationInfo(GitHubApiHelper $apiHelper)
     {
-        $organizationName = 'platformsh-templates'; // 'SymfonyCasts';
+        $organizationName = 'platformsh-templates';
         $organization = $apiHelper->getOrganizationInfo($organizationName);
         $repositories = $apiHelper->getOrganizationRepositories($organizationName);
 
@@ -66,13 +66,14 @@ class MainController extends AbstractController
         ]);
     }
 
+    #[IsGranted("ROLE_USER")]
     #[Route('/terms/updated', name: 'agree_terms_update')]
-    #[IsGranted('ROLE_USER')]
     public function agreeUpdatedTerms(Request $request, EntityManagerInterface $entityManager)
     {
         $form = $this->createForm(AgreeToUpdatedTermsFormType::class);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var User $user */
             $user = $this->getUser();

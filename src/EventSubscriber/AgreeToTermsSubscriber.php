@@ -4,11 +4,15 @@ namespace App\EventSubscriber;
 
 use App\Entity\User;
 use App\Form\AgreeToUpdatedTermsFormType;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 use Twig\Environment;
 
@@ -18,7 +22,9 @@ class AgreeToTermsSubscriber implements EventSubscriberInterface
         private Security $security,
         private FormFactoryInterface $formFactory,
         private Environment $twig,
-        private EntrypointLookupInterface $entrypointLookup
+        private EntrypointLookupInterface $entrypointLookup,
+        private EntityManagerInterface $entityManager,
+        private RouterInterface $router
     ) {
     }
 
@@ -28,6 +34,11 @@ class AgreeToTermsSubscriber implements EventSubscriberInterface
 
         // only need this for authenticated users
         if (!$user instanceof User) {
+            return;
+        }
+
+        if ($event->getRequest()->getMethod() === Request::METHOD_POST) {
+            $this->entrypointLookup->reset();
             return;
         }
 
