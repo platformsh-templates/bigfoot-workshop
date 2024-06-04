@@ -6,15 +6,15 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(name: 'app:sanitize-data')]
 class SanitizeDataCommand extends Command
 {
-    protected static $defaultName = 'app:sanitize-data';
-
     protected static $defaultDescription = 'Sanitize user data (username and email).';
 
     public function __construct(
@@ -32,7 +32,7 @@ class SanitizeDataCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 

@@ -1,10 +1,10 @@
 name: bigfoot-workshop
 type: php
 docroot: public
-php_version: "8.2"
+php_version: "8.3"
 webserver_type: nginx-fpm
-router_http_port: "80"
-router_https_port: "443"
+router_http_port: "8086"
+router_https_port: "4436"
 xdebug_enabled: false
 additional_hostnames: []
 additional_fqdns: []
@@ -16,7 +16,18 @@ mutagen_enabled: false
 use_dns_when_possible: true
 composer_version: "2"
 web_environment:
+  # SymfonyOnline June 2023
+  # - BLACKFIRE_SERVER_ID=c328fe82-426b-459f-a29b-c3bb7970abed
+  # - BLACKFIRE_SERVER_TOKEN=8c5145872faea3c0bcfa9bd521480e00436d2b4cc086cb6c1f2e36a35dc3b61e
+
+  # Playground
+  - BLACKFIRE_SERVER_ID=6ab747b2-0478-4dfa-be09-8dc878f02c1f
+  - BLACKFIRE_SERVER_TOKEN=a5c1b4613300287ae4b8b80cb5b394275a10e6c511b0dc0e9551e7c6f10d1184
+
   - DATABASE_URL=pgsql://db:db@db:5432/db
+
+  - BLACKFIRE_CLIENT_ID=78aae1a6-a13e-4ce1-8b8a-8d982944b20a
+  - BLACKFIRE_CLIENT_TOKEN=089f2f10e09119df76d359852b78ba693e185f28161e330a0822b1be09b4b6fc
 nodejs_version: "16"
 hooks:
   post-start:

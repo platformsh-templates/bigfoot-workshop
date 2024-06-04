@@ -4,11 +4,15 @@ namespace App\EventSubscriber;
 
 use App\Entity\User;
 use App\Form\AgreeToUpdatedTermsFormType;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 use Twig\Environment;
 
@@ -18,7 +22,9 @@ class AgreeToTermsSubscriber implements EventSubscriberInterface
         private Security $security,
         private FormFactoryInterface $formFactory,
         private Environment $twig,
-        private EntrypointLookupInterface $entrypointLookup
+        private EntrypointLookupInterface $entrypointLookup,
+        private EntityManagerInterface $entityManager,
+        private RouterInterface $router
     ) {
     }
 
@@ -31,6 +37,11 @@ class AgreeToTermsSubscriber implements EventSubscriberInterface
             return;
         }
 
+        if ($event->getRequest()->getMethod() === Request::METHOD_POST) {
+            $this->entrypointLookup->reset();
+            return;
+        }
+
         // in reality, you would hardcode the most recent "terms" date
         // change so you can see if the user needs to "re-agree". I've
         // set it dynamically to 1 year ago to avoid anyone hitting
@@ -38,12 +49,6 @@ class AgreeToTermsSubscriber implements EventSubscriberInterface
         //$latestTermsDate = new \DateTimeImmutable('2019-10-15');
         $latestTermsDate = new \DateTimeImmutable('-1 year');
 
-        // user is up-to-date!
-        if ($user->getAgreedToTermsAt() >= $latestTermsDate) {
-            return;
-        }
-
-        \BlackfireProbe::addMarker('Enforce the user to agree to terms');
         $form = $this->formFactory->create(AgreeToUpdatedTermsFormType::class);
 
         $html = $this->twig->render('main/agreeUpdatedTerms.html.twig', [
@@ -54,6 +59,11 @@ class AgreeToTermsSubscriber implements EventSubscriberInterface
         // "exit" this function before rendering the template if
         // we know the user doesn't need to see the form!
         $this->entrypointLookup->reset();
+
+        // user is up-to-date!
+        if ($user->getAgreedToTermsAt() >= $latestTermsDate) {
+            return;
+        }
 
         $response = new Response($html);
         $event->setResponse($response);
