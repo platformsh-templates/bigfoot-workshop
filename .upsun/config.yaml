@@ -2,18 +2,17 @@ routes:
     "https://{all}/": { type: upstream, upstream: "app:http" }
     "http://{all}/": { type: redirect, to: "https://{all}/" }
 
-services: 
+services:
     database:
         type: postgresql:13
 
-    
 
 applications:
     app:
         source:
             root: "/"
 
-        type: php:8.2
+        type: php:8.3
 
         runtime:
             extensions:
@@ -25,7 +24,7 @@ applications:
                 - pdo_pgsql
                 - sodium
                 - xsl
-                
+
 
         variables:
             php:
@@ -42,17 +41,17 @@ applications:
 
         mounts:
             "/var": { source: storage, source_path: var }
-            
+
 
         relationships:
             database: "database:postgresql"
-            
+
         hooks:
             build: |
                 set -x -e
 
                 curl -fs https://get.symfony.com/cloud/configurator | bash
-                
+
                 NODE_VERSION=18 symfony-build
 
             deploy: |
@@ -63,9 +62,7 @@ applications:
         crons:
             security-check:
                 # Check that no security issues have been found for PHP packages deployed in production
+                # See https://github.com/fabpot/local-php-security-checker
                 spec: '50 23 * * *'
-                cmd: if [ "$PLATFORM_ENVIRONMENT_TYPE" = "production" ]; then croncape COMPOSER_ROOT_VERSION=1.0.0 COMPOSER_AUDIT_ABANDONED=ignore composer audit --no-cache; fi
+                cmd: if [ "$PLATFORM_ENVIRONMENT_TYPE" = "production" ]; then croncape php-security-checker; fi
 
-            update-sighting:
-                spec: '*/5 * * * *'
-                cmd: './bin/console app:update-sighting-scores'
