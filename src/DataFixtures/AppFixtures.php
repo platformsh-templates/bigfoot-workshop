@@ -81,10 +81,11 @@ class AppFixtures extends Fixture
             } else {
                 $comment->setOwner($this->users[array_rand($this->users)]);
             }
-            $comment->setBigFootSighting($this->sightings[array_rand($this->sightings)]);
+            $randomSighting = $this->sightings[array_rand($this->sightings)];
+            $comment->setBigFootSighting($randomSighting);
             $comment->setContent($this->faker->paragraph);
             $comment->setCreatedAt($this->faker->dateTimeBetween(
-                $comment->getBigFootSighting()->getCreatedAt(),
+                $randomSighting->getCreatedAt(),
                 'now'
             ));
 
