@@ -52,7 +52,7 @@ class Sighting135Fixtures extends Fixture
             $comment->setBigFootSighting($sighting);
             $comment->setContent($this->faker->paragraph);
             $comment->setCreatedAt($this->faker->dateTimeBetween(
-                $comment->getBigFootSighting()->getCreatedAt(),
+                $sighting->getCreatedAt(),
                 'now'
             ));
 
